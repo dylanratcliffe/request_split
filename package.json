@@ -1,0 +1,22 @@
+{
+  "name": "request_split",
+  "version": "0.0.1",
+  "description": "Splits API Requests and tracks responses",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dylanratcliffe/request_split.git"
+  },
+  "author": "Dylan Ratcliffe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dylanratcliffe/request_split/issues"
+  },
+  "homepage": "https://github.com/dylanratcliffe/request_split#readme",
+  "dependencies": {
+    "http-proxy": "^1.12.1"
+  }
+}
