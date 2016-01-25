@@ -1,0 +1,9 @@
+---
+"master.mel.puppetlabs.vm":
+  "certFile": "ssl/ca/signed/master.mel.puppetlabs.demo.pem"
+  "keyFile": "ssl/private_keys/master.mel.puppetlabs.demo.pem"
+  "caCert": "ssl/ca/ca_crt.pem"
+"master2.mel.puppetlabs.vm":
+  "certFile": "ssl/ca/signed/master.mel.puppetlabs.demo.pem"
+  "keyFile": "ssl/private_keys/master.mel.puppetlabs.demo.pem"
+  "caCert": "ssl/ca/ca_crt.pem"
