@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/dylanratcliffe/request_split#readme",
   "dependencies": {
-    "http-proxy": "^1.12.1"
+    "http-proxy": "^1.12.1",
+    "request": "^2.67.0"
   }
 }
