@@ -59,6 +59,12 @@ var server = http.createServer(function(req, response) {
       console.error(errors)
     }
 
+    // TODO: There is no point dealing with errors from GET requests as they
+    // should just come from the MOM, however POST requests should go out and
+    // errors should be handled. Make sure that if we have a GET request
+    // that we just send back the MOM's response and that we only do error
+    // handling when we have a POST
+
     var response_to_send;
     // Check if any masters responded, but did so with a bad code
     master_responses.forEach(function (value) {
