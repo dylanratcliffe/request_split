@@ -10,6 +10,10 @@
     "type": "git",
     "url": "git+https://github.com/dylanratcliffe/request_split.git"
   },
+  "files": [
+    "package.json",
+    "index.js"
+  ],
   "author": "Dylan Ratcliffe",
   "license": "ISC",
   "bugs": {
