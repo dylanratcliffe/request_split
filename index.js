@@ -1,4 +1,5 @@
 var http    = require('http');
+var https   = require('https');
 var request = require('request');
 var fs      = require('fs');
 var async   = require('async');
@@ -6,11 +7,27 @@ var path    = require('path');
 var YAML    = require('yamljs');
 var config = YAML.load('config.yaml');
 
+// Read the certs into memory once
+for (master in config) {
+  config[master]['cert_file'] = fs.readFileSync(path.resolve(__dirname, config[master]['cert_file']))
+  config[master]['key_file'] = fs.readFileSync(path.resolve(__dirname, config[master]['key_file']))
+  config[master]['ca_cert'] = fs.readFileSync(path.resolve(__dirname, config[master]['ca_cert']))
+}
+
+// Use the credentials form the first master in the config file
+var default_master_config = config[(Object.keys(config)[0])]
+var options = {
+    key: default_master_config['key_file'],
+    cert: default_master_config['cert_file'],
+    ca: default_master_config['ca_cert'],
+    requestCert: false,
+    rejectUnauthorized: false
+};
 // Okay so this block defines what the webserver will do. Inside is a request
 // function that will basically do a request whenever the running webserver
 // gets one. The plan is that it will just take the API request it gets and
 // relay that to each server it is configured to.
-var server = http.createServer(function(req, response) {
+var server = https.createServer(options, function(req, response) {
   // All of the code in this block is executed every time we get a request
   console.log("Got a request");
   var errors = [];
@@ -39,9 +56,9 @@ var server = http.createServer(function(req, response) {
       followRedirect: true,
       maxRedirects: 10,
       agentOptions: {
-        cert: fs.readFileSync(path.resolve(__dirname, master_config['certFile'])),
-        key: fs.readFileSync(path.resolve(__dirname, master_config['keyFile'])),
-        ca: fs.readFileSync(path.resolve(__dirname, master_config['caCert'])),
+        cert: master_config['cert_file'],
+        key: master_config['key_file'],
+        ca: master_config['ca_cert'],
       },
     }, function(error, master_response, body) {
       // In here is what gets executed after we have done the request. There will
@@ -65,21 +82,30 @@ var server = http.createServer(function(req, response) {
     // that we just send back the MOM's response and that we only do error
     // handling when we have a POST
 
-    var response_to_send;
-    // Check if any masters responded, but did so with a bad code
-    master_responses.forEach(function (value) {
-      if (value.statusCode > 399) {
-        response_to_send = value
-      }
-    })
-
-    if (! response_to_send) {
+    if (req.method == "GET") {
       // Send back the response from the first server in the config file
       master_responses.forEach(function (value) {
         if (value.request.host == Object.keys(config)[0]) {
           response_to_send = value
         }
       })
+    } else {
+      var response_to_send;
+      // Check if any masters responded, but did so with a bad code
+      master_responses.forEach(function (value) {
+        if (value.statusCode > 399) {
+          response_to_send = value
+        }
+      })
+
+      if (! response_to_send) {
+        // Send back the response from the first server in the config file
+        master_responses.forEach(function (value) {
+          if (value.request.host == Object.keys(config)[0]) {
+            response_to_send = value
+          }
+        })
+      }
     }
 
     rebuildResponse(response, response_to_send, function(response) {
@@ -93,6 +119,8 @@ var server = http.createServer(function(req, response) {
 console.log("listening on port 5050")
 server.listen(5050);
 
+// This just grabs the fields from the response object we got from the puppet
+// master and dumps it into a response object
 function rebuildResponse(responseOut, responseIn, callback) {
   responseOut.statusCode = responseIn.statusCode
   responseOut.statusMessage = responseIn.statusMessage

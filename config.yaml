@@ -1,9 +1,12 @@
 ---
-"master.mel.puppetlabs.vm":
-  "certFile": "ssl/ca/signed/master.mel.puppetlabs.demo.pem"
-  "keyFile": "ssl/private_keys/master.mel.puppetlabs.demo.pem"
-  "caCert": "ssl/ca/ca_crt.pem"
-"master2.mel.puppetlabs.vm":
-  "certFile": "ssl/ca/signed/master.mel.puppetlabs.demo.pem"
-  "keyFile": "ssl/private_keys/master.mel.puppetlabs.demo.pem"
-  "caCert": "ssl/ca/ca_crt.pem"
+# The top host will be used as the default
+"mom.puppetlabs.demo":
+  "cert_file": "ssl/ca/signed/mom.puppetlabs.demo.pem"
+  "key_file": "ssl/private_keys/mom.puppetlabs.demo.pem"
+  "ca_cert": "ssl/ca/ca_crt_mom.puppetlabs.demo.pem"
+  "port": 4433
+"master.mel.puppetlabs.demo":
+  "cert_file": "ssl/ca/signed/master.mel.puppetlabs.demo.pem"
+  "key_file": "ssl/private_keys/master.mel.puppetlabs.demo.pem"
+  "ca_cert": "ssl/ca/ca_crt_master.mel.puppetlabs.demo.pem"
+  "port": 4433
