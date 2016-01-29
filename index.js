@@ -116,8 +116,8 @@ var server = https.createServer(options, function(req, response) {
   });
 });
 
-console.log("listening on port 5050")
-server.listen(5050);
+console.log("listening on port 44333")
+server.listen(44333);
 
 // This just grabs the fields from the response object we got from the puppet
 // master and dumps it into a response object
